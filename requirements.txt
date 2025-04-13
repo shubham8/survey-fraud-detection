@@ -1,0 +1,6 @@
+geopandas==1.0.1
+numpy==2.2.1
+pandas==2.2.3
+rapidfuzz==3.13 # string matching algorithm
+seaborn==0.13.2
+shapely==2.0.6
