@@ -140,7 +140,7 @@ Execute `05_get_final_descriptives.py` to print descriptive statistics (such as 
 If `figure_folder` value provided in the `filepaths` sheet of `parameters.xlsx`, the plots are saved in the `figure_folder` folder. 
 
 
-# [Optional Tool: Fuzzy String Matching Tool
+# Optional Tool: Fuzzy String Matching Tool
 
 This fuzzy string matching tool compares each text responses within a column and computes a similarity score (ranging from 0 and 100) based on the presence and frequency of shared words. Two columns are added to the dataframe: 
 
