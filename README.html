@@ -1,8 +1,169 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Before you begin</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <p><strong>Fraud Detection Method</strong></p>
+<ul>
+<li><a href="#before-you-begin">Before you begin</a></li>
+<li><a href="#set-up-parameters">Set up parameters</a>
+<ul>
+<li><a href="#sheet-1-filepaths">Sheet 1: <code>filepaths</code></a></li>
+<li><a href="#sheet-2-flags">Sheet 2: <code>flags</code></a></li>
+<li><a href="#sheet-3-initial_classification_rules">Sheet 3: <code>initial_classification_rules</code></a></li>
+<li><a href="#sheet-4-final_classification_rules">Sheet 4: <code>final_classification_rules</code></a></li>
+</ul>
+</li>
+<li><a href="#fraud-detection">Fraud detection</a>
+<ul>
+<li><a href="#step-1-initial-classification">Step 1: Initial classification</a></li>
+<li><a href="#step-2-get-descriptive-statistics-and-generate-plots-optional">Step 2: Get descriptive statistics and generate plots (Optional)</a></li>
+<li><a href="#step-3-manual-classification">Step 3: Manual classification</a></li>
+<li><a href="#step-4-final-classification">Step 4: Final classification</a></li>
+<li><a href="#step-5-get-descriptive-statistics-and-generate-plots-optional">Step 5: Get descriptive statistics and generate plots (Optional)</a></li>
+</ul>
+</li>
+</ul>
 <h1 id="before-you-begin">Before you begin</h1>
 <ul>
 <li>Verify the folder structure</li>
 </ul>
-<pre class="text"><code>.
+<pre><code class="language-text">.
 ├── config/
     ├── parameters.xlsx # Parameters file. Requires user input.
     └── world-administrative-boundaries # Optional shape file to get country from latitude-longitude
@@ -19,168 +180,152 @@
 ├── 04_final_classification.py
 ├── 05_get_final_descriptives.py
 ├── README.md
-└── fraud_detection.py # Contains implemented methods.</code></pre>
+└── fraud_detection.py # Contains implemented methods.
+</code></pre>
 <ul>
-<li><p>Install <a
-href="https://www.python.org/downloads/release/python-3129/">Python-3.12.9</a>.
-Newer verions may work as well.</p></li>
-<li><p>[Optional] Set up a virtual environment to avoid version
-conflicts.</p>
+<li>
+<p>Install <a href="https://www.python.org/downloads/release/python-3129/">Python-3.12.9</a>. Newer verions may work as well.</p>
+</li>
+<li>
+<p>[Optional] Set up a virtual environment to avoid version conflicts.</p>
 <ul>
 <li>Open command prompt (Windows)</li>
-<li>Navigate to the project folder:
-<code>cd \path\to\spam-detection</code></li>
-<li>Create a virtual environment:
-<code>python -m venv myvenv</code></li>
-<li>Activate the virtual environment:
-<code>myvenv\Scripts\activate</code></li>
-</ul></li>
-<li><p>Install required Python modules:
-<code>pip install -r \path\to\requirements.txt</code></p></li>
+<li>Navigate to the project folder: <code>cd \path\to\spam-detection</code></li>
+<li>Create a virtual environment: <code>python -m venv myvenv</code></li>
+<li>Activate the virtual environment: <code>myvenv\Scripts\activate</code></li>
+</ul>
+</li>
+<li>
+<p>Install required Python modules: <code>pip install -r \path\to\requirements.txt</code></p>
+</li>
 </ul>
 <h1 id="set-up-parameters">Set up parameters</h1>
 <ul>
-<li>Ensure that <code>parameters.xlsx</code> exists in the
-<code>config</code> folder. This file should contain four sheets:</li>
+<li>Ensure that <code>parameters.xlsx</code> exists in the <code>config</code> folder. This file should contain four sheets:</li>
 </ul>
 <h2 id="sheet-1-filepaths">Sheet 1: <code>filepaths</code></h2>
-<p>Specifies paths for files and folder. This sheet contains three
-columns:</p>
+<p>Specifies paths for files and folder. This sheet contains three columns:</p>
 <ul>
-<li><p><code>parameter</code>: Variable names used to refer specific
-file or folder. &gt; <strong>WARNING</strong>: Do not modify this
-column.</p></li>
-<li><p><code>value</code>: Path of corresponding <code>parameter</code>.
-The <code>value</code> for the <code>data_file</code> parameter must be
-changed to the survey data filepath.</p></li>
-<li><p><code>description</code>: Description of corresponding
-<code>parameter</code>.</p></li>
+<li>
+<p>🚫 <strong>[DO NOT EDIT]</strong> <code>parameter</code>: Variable names used to refer specific file or folder.</p>
+</li>
+<li>
+<p>✏️ <strong>[EDIT / REVIEW]</strong> <code>value</code>: Path of corresponding <code>parameter</code>. The <code>value</code> for the <code>data_file</code> parameter must be changed to the survey data filepath.</p>
+</li>
+<li>
+<p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>description</code>: Description of corresponding <code>parameter</code>.</p>
+</li>
 </ul>
 <h2 id="sheet-2-flags">Sheet 2: <code>flags</code></h2>
-<p>Contains details of flags used for automated fraud detection. Each
-row specifies one flag. This sheet contains six columns:</p>
+<p>Contains details of flags used for automated fraud detection. Each row specifies one flag. This sheet contains six columns:</p>
 <ul>
-<li><p><code>flag_name</code>: Name of the flag. We recommend using the
-convention <code>F_FlagName</code>.</p></li>
-<li><p><code>method_name</code> Name of the method used. Must match the
-method name implemented in <code>fraud_detection.py</code>. See
-<code>docs</code> for more details.</p></li>
-<li><p><code>flag_group</code>: Name of the flag group. We recommend
-using the convention <code>FG_FlagGroupName</code>.</p></li>
-<li><p><code>use_flag</code>: Indicator for using the flag
-(<code>1</code>) or not (<code>0</code>).</p></li>
-<li><p><code>parameters</code>: Flag-specific paramters that are
-required by the corresponding method. See <code>docs</code> for more
-details.</p></li>
-<li><p><code>description</code>: A brief description of the flag.
-Optional.</p></li>
+<li>
+<p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>flag_name</code>: Name of the flag. We recommend using the convention <code>F_FlagName</code>.</p>
+</li>
+<li>
+<p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>method_name</code> Name of the method used. Must match the method name implemented in <code>fraud_detection.py</code>. See <code>docs</code> for more details.</p>
+</li>
+<li>
+<p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>flag_group</code>: Name of the flag group. We recommend using the convention <code>FG_FlagGroupName</code>.</p>
+</li>
+<li>
+<p>✏️ <strong>[EDIT / REVIEW]</strong> <code>use_flag</code>: Indicator for using the flag (<code>1</code>) or not (<code>0</code>).</p>
+</li>
+<li>
+<p>✏️ <strong>[EDIT / REVIEW]</strong> <code>parameters</code>: Flag-specific paramters that are required by the corresponding method. See <code>docs</code> for more details.</p>
+</li>
+<li>
+<p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>description</code>: A brief description of the flag. Optional.</p>
+</li>
 </ul>
-<h2 id="sheet-3-initial_classification_rules">Sheet 3:
-<code>initial_classification_rules</code></h2>
-<p>Contains a sequence of top-down rules to classify responses based on
-flag groups. Once a rule is satisfied, the response is assigned the
-corresponding classification, and no subsequent rules are evaluated.
-This sheet contains four columns:</p>
+<h2 id="sheet-3-initial_classification_rules">Sheet 3: <code>initial_classification_rules</code></h2>
+<p>Contains a sequence of top-down rules to classify responses based on flag groups. Once a rule is satisfied, the response is assigned the corresponding classification, and no subsequent rules are evaluated. This sheet contains four columns:</p>
 <ul>
-<li><p><code>rule_num</code>: Rule number. Optional.</p></li>
-<li><p><code>condition_expr</code>: An expression for the Boolean
-condition using flag groups. The expression is evaluated using Python’s
-<a
-href="https://docs.python.org/3/library/functions.html#eval"><code>eval()</code></a>.
-The evaluation of the expression must return either <code>True</code> or
-<code>False</code>.</p></li>
-<li><p><code>classification</code>: Response classification
-label.</p></li>
-<li><p><code>use_rule</code>: Indicator for using the rule
-(<code>1</code>) or not (<code>0</code>).</p></li>
+<li>
+<p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>rule_num</code>: Rule number. Optional.</p>
+</li>
+<li>
+<p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>condition_expr</code>: An expression for the Boolean condition using flag groups. The expression is evaluated using Python's <a href="https://docs.python.org/3/library/functions.html#eval"><code>eval()</code></a>. The evaluation of the expression must return either <code>True</code> or <code>False</code>.</p>
+</li>
+<li>
+<p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>classification</code>: Response classification label.</p>
+</li>
+<li>
+<p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>use_rule</code>: Indicator for using the rule (<code>1</code>) or not (<code>0</code>).</p>
+</li>
 </ul>
-<h2 id="sheet-4-final_classification_rules">Sheet 4:
-<code>final_classification_rules</code></h2>
-<p>Contains a sequence of top-down rules to classify responses combining
-automated and manual classification. Once a rule is satisfied, the
-response is assigned the corresponding classification, and no subsequent
-rules are evaluated. This sheet contains four columns:</p>
+<h2 id="sheet-4-final_classification_rules">Sheet 4: <code>final_classification_rules</code></h2>
+<p>Contains a sequence of top-down rules to classify responses combining automated and manual classification. Once a rule is satisfied, the response is assigned the corresponding classification, and no subsequent rules are evaluated. This sheet contains four columns:</p>
 <ul>
-<li><p><code>rule_num</code>: Rule number. Optional.</p></li>
-<li><p><code>condition_expr</code>: An expression for the Boolean
-condition using <code>FLAG</code> and <code>MANUAL_FLAG</code> columns.
-The expression is evaluated using Python’s <a
-href="https://docs.python.org/3/library/functions.html#eval"><code>eval()</code></a>.
-The evaluation of the expression must return either <code>True</code> or
-<code>False</code>.</p></li>
-<li><p><code>classification</code>: Response classification
-label.</p></li>
-<li><p><code>use_rule</code>: Indicator for using the rule
-(<code>1</code>) or not (<code>0</code>).</p></li>
+<li>
+<p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>rule_num</code>: Rule number. Optional.</p>
+</li>
+<li>
+<p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>condition_expr</code>: An expression for the Boolean condition using <code>FLAG</code> and <code>MANUAL_FLAG</code> columns. The expression is evaluated using Python's <a href="https://docs.python.org/3/library/functions.html#eval"><code>eval()</code></a>. The evaluation of the expression must return either <code>True</code> or <code>False</code>.</p>
+</li>
+<li>
+<p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>classification</code>: Response classification label.</p>
+</li>
+<li>
+<p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>use_rule</code>: Indicator for using the rule (<code>1</code>) or not (<code>0</code>).</p>
+</li>
 </ul>
 <h1 id="fraud-detection">Fraud detection</h1>
-<p>Although fraud detection can be implemented by double-clicking Python
-files. We highly recommend to use command prompt to exectue the
-file.</p>
-<h2 id="step-1-initial-classification">Step 1: Initial
-classification</h2>
-<p>Execute <code>01_initial_classification.py</code> to generate an
-output file with automated response classification.</p>
-<p>The output file path is the value of <code>flagged_file</code> in the
-<code>filepaths</code> sheet of <code>parameters.xlsx</code>. The output
-file will contain:</p>
+<p>Although fraud detection can be implemented by double-clicking Python files, we strongly recommend using command prompt to exectue the file.</p>
+<h2 id="step-1-initial-classification">Step 1: Initial classification</h2>
+<p>Execute <code>01_initial_classification.py</code> to generate an output file with automated response classification.</p>
+<p>The output file path is the value of <code>flagged_file</code> in the <code>filepaths</code> sheet of <code>parameters.xlsx</code>. The output file will contain:</p>
 <ul>
-<li><p>The original survey data columns.</p></li>
-<li><p>Columns corresponding to each flag indicating TRUE or FLASE. Some
-additional columns corresponding to specific methods may also be
-created.</p></li>
-<li><p>Columns corresponding to each flag group with the number of
-corresponding flags activated.</p></li>
-<li><p>The automated response classification column
-<code>FLAG</code>.</p></li>
-<li><p>Placeholder columns for manual classification by the user
-<code>MANUAL_FLAG</code> and <code>MANUAL_COMMENT</code>.</p></li>
+<li>
+<p>The original survey data columns.</p>
+</li>
+<li>
+<p>Columns corresponding to each flag indicating TRUE or FLASE. Some additional columns corresponding to specific methods may also be created.</p>
+</li>
+<li>
+<p>Columns corresponding to each flag group with the number of corresponding flags activated.</p>
+</li>
+<li>
+<p>The automated response classification column <code>FLAG</code>.</p>
+</li>
+<li>
+<p>Placeholder columns for manual classification by the user <code>MANUAL_FLAG</code> and <code>MANUAL_COMMENT</code>.</p>
+</li>
 </ul>
-<h2
-id="step-2-get-descriptive-statistics-and-generate-plots-optional">Step
-2: Get descriptive statistics and generate plots (Optional)</h2>
-<p>Execute <code>02_get_initial_descriptives.py</code> to print
-descriptive statistics (such as counts) for the flags and flag groups
-and to generate co-occurence plots for diagnostic purposes.</p>
+<h2 id="step-2-get-descriptive-statistics-and-generate-plots-optional">Step 2: Get descriptive statistics and generate plots (Optional)</h2>
+<p>Execute <code>02_get_initial_descriptives.py</code> to print descriptive statistics (such as counts) for the flags and flag groups and to generate co-occurence plots for diagnostic purposes.</p>
 <ul>
-<li>If provided, the plots are saved in the <code>figure_folder</code>
-folder provided in the <code>filepaths</code> sheet of
-<code>parameters.xlsx</code>.</li>
+<li>If provided, the plots are saved in the <code>figure_folder</code> folder provided in the <code>filepaths</code> sheet of <code>parameters.xlsx</code>.</li>
 </ul>
 <h2 id="step-3-manual-classification">Step 3: Manual classification</h2>
-<p>This step involves user to manually classify the responses,
-especially the ones marked as <code>TBD</code> in the <code>FLAG</code>
-column during automated classification.</p>
-<p>Manual classification can be done in the <code>flagged_file</code>
-itself. However, a <code>manual_file</code> path can be set in the
-<code>filepaths</code> sheet of <code>parameters.xlsx</code> if the file
-is copied before manual classification.</p>
+<p>This step involves user to manually classify the responses, especially the ones marked as <code>TBD</code> in the <code>FLAG</code> column during automated classification.</p>
+<p>Manual classification can be done in the <code>flagged_file</code> itself. However, a <code>manual_file</code> path can be set in the <code>filepaths</code> sheet of <code>parameters.xlsx</code> if the file is copied before manual classification.</p>
 <ul>
-<li><p>The <code>MANUAL_FLAG</code> entered by the user are used to
-evaluate the <code>condition_expr</code> in the
-<code>final_classification_rules</code> sheet of
-<code>parameters.xlsx</code>.</p></li>
-<li><p><code>MANUAL_COMMENT</code> is an optional column to add
-information justfying the manual classification.</p></li>
+<li>
+<p>The <code>MANUAL_FLAG</code> entered by the user are used to evaluate the <code>condition_expr</code> in the <code>final_classification_rules</code> sheet of <code>parameters.xlsx</code>.</p>
+</li>
+<li>
+<p><code>MANUAL_COMMENT</code> is an optional column to add information justfying the manual classification.</p>
+</li>
 </ul>
 <h2 id="step-4-final-classification">Step 4: Final classification</h2>
-<p>Execute <code>04_final_classification.py</code> to generate an output
-file that combines automated and manual classifications.</p>
-<p>The output file path is the value of <code>final_output_file</code>
-in the <code>filepaths</code> sheet of <code>parameters.xlsx</code>. The
-output file will contain:</p>
+<p>Execute <code>04_final_classification.py</code> to generate an output file that combines automated and manual classifications.</p>
+<p>The output file path is the value of <code>final_output_file</code> in the <code>filepaths</code> sheet of <code>parameters.xlsx</code>. The output file will contain:</p>
 <ul>
-<li><p>All columns in <code>manual_file</code>.</p></li>
-<li><p>A final classification column <code>FINAL_FLAG</code>.</p></li>
+<li>
+<p>All columns in <code>manual_file</code>.</p>
+</li>
+<li>
+<p>A final classification column <code>FINAL_FLAG</code>.</p>
+</li>
 </ul>
-<h2
-id="step-5-get-descriptive-statistics-and-generate-plots-optional">Step
-5: Get descriptive statistics and generate plots (Optional)</h2>
-<p>Execute <code>05_get_final_descriptives.py</code> to print
-descriptive statistics (such as counts) for the flags and flag groups
-and to generate co-occurence plots for diagnostic purposes.</p>
+<h2 id="step-5-get-descriptive-statistics-and-generate-plots-optional">Step 5: Get descriptive statistics and generate plots (Optional)</h2>
+<p>Execute <code>05_get_final_descriptives.py</code> to print descriptive statistics (such as counts) for the flags and flag groups and to generate co-occurence plots for diagnostic purposes.</p>
 <ul>
-<li>If provided, the plots are saved in the <code>figure_folder</code>
-folder provided in the <code>filepaths</code> sheet of
-<code>parameters.xlsx</code>.</li>
+<li>If provided, the plots are saved in the <code>figure_folder</code> folder provided in the <code>filepaths</code> sheet of <code>parameters.xlsx</code>.</li>
 </ul>
+
+            
+            
+        </body>
+        </html>

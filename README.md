@@ -1,3 +1,18 @@
+**Fraud Detection Method**
+
+- [Before you begin](#before-you-begin)
+- [Set up parameters](#set-up-parameters)
+  - [Sheet 1: `filepaths`](#sheet-1-filepaths)
+  - [Sheet 2: `flags`](#sheet-2-flags)
+  - [Sheet 3: `initial_classification_rules`](#sheet-3-initial_classification_rules)
+  - [Sheet 4: `final_classification_rules`](#sheet-4-final_classification_rules)
+- [Fraud detection](#fraud-detection)
+  - [Step 1: Initial classification](#step-1-initial-classification)
+  - [Step 2: Get descriptive statistics and generate plots (Optional)](#step-2-get-descriptive-statistics-and-generate-plots-optional)
+  - [Step 3: Manual classification](#step-3-manual-classification)
+  - [Step 4: Final classification](#step-4-final-classification)
+  - [Step 5: Get descriptive statistics and generate plots (Optional)](#step-5-get-descriptive-statistics-and-generate-plots-optional)
+
 # Before you begin
 
 - Verify the folder structure
@@ -31,7 +46,6 @@
 
 - Install required Python modules: `pip install -r \path\to\requirements.txt`
 
-
 # Set up parameters
 
 - Ensure that `parameters.xlsx` exists in the `config` folder. This file should contain four sheets:
@@ -39,52 +53,51 @@
 ## Sheet 1: `filepaths`
 Specifies paths for files and folder. This sheet contains three columns:
 
-- `parameter`: Variable names used to refer specific file or folder. 
-    > **WARNING**: Do not modify this column.
+- 🚫 **[DO NOT EDIT]** `parameter`: Variable names used to refer specific file or folder. 
 
-- `value`: Path of corresponding `parameter`. The `value` for the `data_file` parameter must be changed to the survey data filepath.
+- ✏️ **[EDIT / REVIEW]** `value`: Path of corresponding `parameter`. The `value` for the `data_file` parameter must be changed to the survey data filepath.
 
-- `description`: Description of corresponding `parameter`.
+- 🔧 **[OPTIONAL EDIT]** `description`: Description of corresponding `parameter`.
 
 ## Sheet 2: `flags`
 Contains details of flags used for automated fraud detection. Each row specifies one flag. This sheet contains six columns:
 
-- `flag_name`: Name of the flag. We recommend using the convention `F_FlagName`.
+- 🔧 **[OPTIONAL EDIT]** `flag_name`: Name of the flag. We recommend using the convention `F_FlagName`.
 
-- `method_name` Name of the method used. Must match the method name implemented in `fraud_detection.py`. See `docs` for more details.
+- 🔧 **[OPTIONAL EDIT]** `method_name` Name of the method used. Must match the method name implemented in `fraud_detection.py`. See `docs` for more details.
 
-- `flag_group`: Name of the flag group. We recommend using the convention `FG_FlagGroupName`.
+- 🔧 **[OPTIONAL EDIT]** `flag_group`: Name of the flag group. We recommend using the convention `FG_FlagGroupName`.
 
-- `use_flag`: Indicator for using the flag (`1`) or not (`0`). 
+- ✏️ **[EDIT / REVIEW]** `use_flag`: Indicator for using the flag (`1`) or not (`0`). 
 
-- `parameters`: Flag-specific paramters that are required by the corresponding method. See `docs` for more details.
+- ✏️ **[EDIT / REVIEW]** `parameters`: Flag-specific paramters that are required by the corresponding method. See `docs` for more details.
 
-- `description`: A brief description of the flag. Optional.
+- 🔧 **[OPTIONAL EDIT]** `description`: A brief description of the flag. Optional.
 
 ## Sheet 3: `initial_classification_rules`
 Contains a sequence of top-down rules to classify responses based on flag groups. Once a rule is satisfied, the response is assigned the corresponding classification, and no subsequent rules are evaluated. This sheet contains four columns:
 
-- `rule_num`: Rule number. Optional.
+- 🔧 **[OPTIONAL EDIT]** `rule_num`: Rule number. Optional.
 
-- `condition_expr`: An expression for the Boolean condition using flag groups. The expression is evaluated using Python's [`eval()`](https://docs.python.org/3/library/functions.html#eval). The evaluation of the expression must return either `True` or `False`.
+- 🔧 **[OPTIONAL EDIT]** `condition_expr`: An expression for the Boolean condition using flag groups. The expression is evaluated using Python's [`eval()`](https://docs.python.org/3/library/functions.html#eval). The evaluation of the expression must return either `True` or `False`.
 
-- `classification`: Response classification label.
+- 🔧 **[OPTIONAL EDIT]** `classification`: Response classification label.
 
-- `use_rule`: Indicator for using the rule (`1`) or not (`0`).
+- 🔧 **[OPTIONAL EDIT]** `use_rule`: Indicator for using the rule (`1`) or not (`0`).
 
 ## Sheet 4: `final_classification_rules`
 Contains a sequence of top-down rules to classify responses combining automated and manual classification. Once a rule is satisfied, the response is assigned the corresponding classification, and no subsequent rules are evaluated. This sheet contains four columns:
 
-- `rule_num`: Rule number. Optional.
+- 🔧 **[OPTIONAL EDIT]** `rule_num`: Rule number. Optional.
 
-- `condition_expr`: An expression for the Boolean condition using `FLAG` and `MANUAL_FLAG` columns. The expression is evaluated using Python's [`eval()`](https://docs.python.org/3/library/functions.html#eval). The evaluation of the expression must return either `True` or `False`.
+- 🔧 **[OPTIONAL EDIT]** `condition_expr`: An expression for the Boolean condition using `FLAG` and `MANUAL_FLAG` columns. The expression is evaluated using Python's [`eval()`](https://docs.python.org/3/library/functions.html#eval). The evaluation of the expression must return either `True` or `False`.
 
-- `classification`: Response classification label.
+- 🔧 **[OPTIONAL EDIT]** `classification`: Response classification label.
 
-- `use_rule`: Indicator for using the rule (`1`) or not (`0`).
+- 🔧 **[OPTIONAL EDIT]** `use_rule`: Indicator for using the rule (`1`) or not (`0`).
 
 # Fraud detection
-Although fraud detection can be implemented by double-clicking Python files. We highly recommend to use command prompt to exectue the file. 
+Although fraud detection can be implemented by double-clicking Python files, we strongly recommend using command prompt to exectue the file. 
 
 ## Step 1: Initial classification
 Execute `01_initial_classification.py` to generate an output file with automated response classification. 

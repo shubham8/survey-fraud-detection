@@ -383,6 +383,7 @@ def check_MultipleIPAttempts(df, flag_name, column_ip, column_success, num_attem
         flag_name (str) : Flag name.
         column_ip (str) : Column name with IP address.
         column_success (str) : Column name with a non-empty response treated as a successful attempt.
+            "column_success" should typically be a question towards the end of the survey.
         num_attempts_lower (int) : Minimum number of attempts from the same IP to be flagged (>=).
         num_attempts_upper (int) : Maximum number of attempts from the same IP to be flagged (<=).
             Defaults to np.inf.
@@ -528,9 +529,9 @@ def check_DuplicatedText(df, flag_name, list_of_columns, min_length, max_length,
         min_length (int) : Minimum string length of text responses.
         max_length (int) : Maximum string length of text responses.
         search_strategy (str) : Search strategy to mark duplicates. Defaults to 'column'.
-            'column' looks for duplicates within each text column and flags if any of the columns contains a duplicate. 
+            - 'column' looks for duplicates within each text column and flags if any of the columns contains a duplicate. 
                 This strategy creates flags for individual columns as well.
-            'all' looks for duplicates across all text columns.
+            - 'all' looks for duplicates across all text columns.
         create_column_flag (boolean): Bollean to add column-wise flag. Defaults to False.
         
     Returns:
