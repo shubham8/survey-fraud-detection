@@ -1,4 +1,4 @@
-**Fraud Detection Method**
+# **Fraud Detection Method**
 
 - [Before you begin](#before-you-begin)
 - [Set up parameters](#set-up-parameters)
@@ -12,7 +12,7 @@
   - [Step 3: Manual classification](#step-3-manual-classification)
   - [Step 4: Final classification](#step-4-final-classification)
   - [Step 5: Get descriptive statistics and generate plots (Optional)](#step-5-get-descriptive-statistics-and-generate-plots-optional)
-- [\[Optional Tool\] Fuzzy String Matching Tool](#optional-tool-fuzzy-string-matching-tool)
+- [Optional Tool: Fuzzy String Matching Tool](#optional-tool-fuzzy-string-matching-tool)
   - [Sheet 5: `fuzzy_string`](#sheet-5-fuzzy_string)
 
 # Before you begin
@@ -140,7 +140,7 @@ Execute `05_get_final_descriptives.py` to print descriptive statistics (such as 
 If `figure_folder` value provided in the `filepaths` sheet of `parameters.xlsx`, the plots are saved in the `figure_folder` folder. 
 
 
-# [Optional Tool] Fuzzy String Matching Tool
+# [Optional Tool: Fuzzy String Matching Tool
 
 This fuzzy string matching tool compares each text responses within a column and computes a similarity score (ranging from 0 and 100) based on the presence and frequency of shared words. Two columns are added to the dataframe: 
 
