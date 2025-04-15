@@ -158,6 +158,11 @@
 <li><a href="#step-5-get-descriptive-statistics-and-generate-plots-optional">Step 5: Get descriptive statistics and generate plots (Optional)</a></li>
 </ul>
 </li>
+<li><a href="#optional-tool-fuzzy-string-matching-tool">[Optional Tool] Fuzzy String Matching Tool</a>
+<ul>
+<li><a href="#sheet-5-fuzzy_string">Sheet 5: <code>fuzzy_string</code></a></li>
+</ul>
+</li>
 </ul>
 <h1 id="before-you-begin">Before you begin</h1>
 <ul>
@@ -183,25 +188,21 @@
 └── fraud_detection.py # Contains implemented methods.
 </code></pre>
 <ul>
-<li>
-<p>Install <a href="https://www.python.org/downloads/release/python-3129/">Python-3.12.9</a>. Newer verions may work as well.</p>
-</li>
-<li>
-<p>[Optional] Set up a virtual environment to avoid version conflicts.</p>
-<ul>
+<li>Install <a href="https://www.python.org/downloads/release/python-3129/">Python-3.12.9</a>. Newer verions may work as well.</li>
 <li>Open command prompt (Windows)</li>
+<li>[Optional] Set up a virtual environment to avoid version conflicts.
+<ul>
 <li>Navigate to the project folder: <code>cd \path\to\spam-detection</code></li>
 <li>Create a virtual environment: <code>python -m venv myvenv</code></li>
 <li>Activate the virtual environment: <code>myvenv\Scripts\activate</code></li>
 </ul>
 </li>
-<li>
-<p>Install required Python modules: <code>pip install -r \path\to\requirements.txt</code></p>
-</li>
+<li>Open command prompt (Windows)</li>
+<li>Install required Python modules: <code>pip install -r \path\to\requirements.txt</code></li>
 </ul>
 <h1 id="set-up-parameters">Set up parameters</h1>
 <ul>
-<li>Ensure that <code>parameters.xlsx</code> exists in the <code>config</code> folder. This file should contain four sheets:</li>
+<li>Ensure that <code>parameters.xlsx</code> exists in the <code>config</code> folder. This file should contain the following four sheets:</li>
 </ul>
 <h2 id="sheet-1-filepaths">Sheet 1: <code>filepaths</code></h2>
 <p>Specifies paths for files and folder. This sheet contains three columns:</p>
@@ -276,21 +277,11 @@
 <p>Execute <code>01_initial_classification.py</code> to generate an output file with automated response classification.</p>
 <p>The output file path is the value of <code>flagged_file</code> in the <code>filepaths</code> sheet of <code>parameters.xlsx</code>. The output file will contain:</p>
 <ul>
-<li>
-<p>The original survey data columns.</p>
-</li>
-<li>
-<p>Columns corresponding to each flag indicating TRUE or FLASE. Some additional columns corresponding to specific methods may also be created.</p>
-</li>
-<li>
-<p>Columns corresponding to each flag group with the number of corresponding flags activated.</p>
-</li>
-<li>
-<p>The automated response classification column <code>FLAG</code>.</p>
-</li>
-<li>
-<p>Placeholder columns for manual classification by the user <code>MANUAL_FLAG</code> and <code>MANUAL_COMMENT</code>.</p>
-</li>
+<li>The original survey data columns.</li>
+<li>Columns corresponding to each flag indicating TRUE or FLASE. Some additional columns corresponding to specific methods may also be created.</li>
+<li>Columns corresponding to each flag group with the number of corresponding flags activated.</li>
+<li>The automated response classification column <code>FLAG</code>.</li>
+<li>Placeholder columns for manual classification by the user <code>MANUAL_FLAG</code> and <code>MANUAL_COMMENT</code>.</li>
 </ul>
 <h2 id="step-2-get-descriptive-statistics-and-generate-plots-optional">Step 2: Get descriptive statistics and generate plots (Optional)</h2>
 <p>Execute <code>02_get_initial_descriptives.py</code> to print descriptive statistics (such as counts) for the flags and flag groups and to generate co-occurence plots for diagnostic purposes.</p>
@@ -301,28 +292,52 @@
 <p>This step involves user to manually classify the responses, especially the ones marked as <code>TBD</code> in the <code>FLAG</code> column during automated classification.</p>
 <p>Manual classification can be done in the <code>flagged_file</code> itself. However, a <code>manual_file</code> path can be set in the <code>filepaths</code> sheet of <code>parameters.xlsx</code> if the file is copied before manual classification.</p>
 <ul>
-<li>
-<p>The <code>MANUAL_FLAG</code> entered by the user are used to evaluate the <code>condition_expr</code> in the <code>final_classification_rules</code> sheet of <code>parameters.xlsx</code>.</p>
-</li>
-<li>
-<p><code>MANUAL_COMMENT</code> is an optional column to add information justfying the manual classification.</p>
-</li>
+<li>The <code>MANUAL_FLAG</code> entered by the user are used to evaluate the <code>condition_expr</code> in the <code>final_classification_rules</code> sheet of <code>parameters.xlsx</code>.</li>
+<li><code>MANUAL_COMMENT</code> is an optional column to add information justfying the manual classification.</li>
 </ul>
 <h2 id="step-4-final-classification">Step 4: Final classification</h2>
 <p>Execute <code>04_final_classification.py</code> to generate an output file that combines automated and manual classifications.</p>
 <p>The output file path is the value of <code>final_output_file</code> in the <code>filepaths</code> sheet of <code>parameters.xlsx</code>. The output file will contain:</p>
 <ul>
-<li>
-<p>All columns in <code>manual_file</code>.</p>
-</li>
-<li>
-<p>A final classification column <code>FINAL_FLAG</code>.</p>
-</li>
+<li>All columns in <code>manual_file</code>.</li>
+<li>A final classification column <code>FINAL_FLAG</code>.</li>
 </ul>
 <h2 id="step-5-get-descriptive-statistics-and-generate-plots-optional">Step 5: Get descriptive statistics and generate plots (Optional)</h2>
 <p>Execute <code>05_get_final_descriptives.py</code> to print descriptive statistics (such as counts) for the flags and flag groups and to generate co-occurence plots for diagnostic purposes.</p>
+<p>If <code>figure_folder</code> value provided in the <code>filepaths</code> sheet of <code>parameters.xlsx</code>, the plots are saved in the <code>figure_folder</code> folder.</p>
+<h1 id="optional-tool-fuzzy-string-matching-tool">[Optional Tool] Fuzzy String Matching Tool</h1>
+<p>This fuzzy string matching tool compares each text responses within a column and computes a similarity score (ranging from 0 and 100) based on the presence and frequency of shared words. Two columns are added to the dataframe:</p>
 <ul>
-<li>If provided, the plots are saved in the <code>figure_folder</code> folder provided in the <code>filepaths</code> sheet of <code>parameters.xlsx</code>.</li>
+<li><code>FZ_COUNT_{column}</code>: Number of similar responses(score &gt; set threshold), and</li>
+<li><code>FZ_SIMILAR_{column}</code>: Score and text of similar responses.</li>
+</ul>
+<p>This tool is particularly useful for larger samples as it provides an easy reference for closer inspection during manual review. It can also be implemented as a custom flag.</p>
+<p>To use this tool,</p>
+<ul>
+<li>Install <code>rapidfuzz</code> v3.13 module using: <code>pip install rapidfuzz==3.13.0</code></li>
+<li>Verify that <code>fuzzy_string</code> sheet exists in <code>parameters.xlsx</code>.</li>
+<li>Verify that a value for the paramter <code>fuzzy_file</code> is provided in the <code>filepaths</code> sheet in <code>parameters.xlsx</code>.
+<ul>
+<li>If using this tool with automated response classification, set <code>fuzzy_file</code> same as <code>data_file</code> and run the <code>tool_mark_similar_responses.py</code> before <code>01_initial_classification.py</code>.</li>
+<li>If using this tool after automated response classification but before manual classification, set <code>fuzzy_file</code> same as <code>flagged_file</code> and run the <code>tool_mark_similar_responses.py</code> before manually classifying the data.</li>
+</ul>
+</li>
+</ul>
+<h2 id="sheet-5-fuzzy_string">Sheet 5: <code>fuzzy_string</code></h2>
+<p>Contains information about text-response columns on which fuzzy string algorithm should be applied. Each row specifies one text-response column. This sheet contains six columns:</p>
+<ul>
+<li>
+<p>✏️ <strong>[EDIT / REVIEW]</strong>  <code>column</code>: Data column name to check for similar resppnses.</p>
+</li>
+<li>
+<p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>minimum_length</code>: The minimum number of characters a text response should have to be tested for similarity. Responses having lesser number of characters will be ignored. This is useful to ignore comparing common short and valid responses like &quot;Nothing&quot;, &quot;None&quot;, or any context-dependent short responses.</p>
+</li>
+<li>
+<p>🚫 <strong>[DO NOT EDIT]</strong> <code>fuzzy_algorithm</code>: Fuzzy string matching llgorithm used for comparing responses. We recommend using <code>token_sort_ratio</code> as it considers both the presence and the frequency of words. For more details, please see the <a href="https://rapidfuzz.github.io/RapidFuzz/Usage/fuzz.html"><code>rapidfuzz</code> documentation</a>.</p>
+</li>
+<li>
+<p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>threshold</code>: Threshold to mark similar responses. Defaults to 65. This should be changed based on trial and error.</p>
+</li>
 </ul>
 
             
