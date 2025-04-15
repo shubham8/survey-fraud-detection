@@ -387,10 +387,11 @@ def check_MultipleIPAttempts(df, flag_name, column_ip, column_success, num_attem
         num_attempts_upper (int) : Maximum number of attempts from the same IP to be flagged (<=).
             Defaults to np.inf.
         attempt_type (str) : Type of attempt to flag. Defaults to 'successful'.
-            'successful' : attempts have a response for the `column_success` question.
-            'incomplete' : attempts have no response for the `column_success` question and has no terminate flag.
-            'failed' : attempts have no response for the `column_success` question and has a terminate flag.
-            'all' : attempts irrespective of if it is successful or not.
+            - 'successful' : attempts have a response for the `column_success` question.
+            - 'unsuccessful' : attempts do not have a response for the `column_success` question.
+            - 'incomplete' : attempts have no response for the `column_success` question and has no terminate flag. A subset of 'unsuccessful' attempts.
+            - 'failed' : attempts have no response for the `column_success` question and has a terminate flag. A subset of 'unsuccessful' attempts.
+            - 'all' : attempts irrespective of if it is successful or not.
         column_terminate (str) : Column name with terminate flag. Optional for 'successful' attempt.
 
     Returns:
@@ -399,6 +400,7 @@ def check_MultipleIPAttempts(df, flag_name, column_ip, column_success, num_attem
     Notes:
         Qualtrics can recode "Seen but unanswered questions" as -99. These are treated as "successful".
         Qualtrics `Q_TerminateFlag` column marks unsuccessful responses as "Screened" or "QuotaMet".
+        A terminate flag (like `Q_TerminateFlag`) is required for 'incomplete' and 'failed' attempts. 
     """
     
     def count_attempts(group):
@@ -413,6 +415,8 @@ def check_MultipleIPAttempts(df, flag_name, column_ip, column_success, num_attem
         """
         if attempt_type == 'successful':
             group[f'num_attempts_{attempt_type}'] = group[column_success].notna().sum()
+        elif attempt_type == 'unsuccessful':
+            group[f'num_attempts_{attempt_type}'] = group[column_success].isna().sum()
         elif attempt_type == 'incomplete':
             group[f'num_attempts_{attempt_type}'] = (group[column_success].isna() & group[column_terminate].isna()).sum()
         elif attempt_type == 'failed':
