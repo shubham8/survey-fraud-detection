@@ -4,3 +4,4 @@ pandas==2.2.3
 rapidfuzz==3.13 # string matching algorithm
 seaborn==0.13.2
 shapely==2.0.6
+openpyxl==3.1.5
