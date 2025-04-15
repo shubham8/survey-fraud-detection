@@ -111,7 +111,7 @@ if __name__ == "__main__":
             min_length=row['minimum_length'] if row['minimum_length'] else 7, 
             fuzz_func=row['fuzzy_algorithm'] if row['fuzzy_algorithm'] else 'token_sort_ratio', 
             threshold=row['threshold'] if row['threshold'] else 65, 
-            save_matrix=row['maxtrix_filepath']
+            save_matrix=None,    # For diagnostic purposes only
         )
 
     df.to_csv(fn_fuzz, index=False)

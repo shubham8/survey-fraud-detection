@@ -12,6 +12,8 @@
   - [Step 3: Manual classification](#step-3-manual-classification)
   - [Step 4: Final classification](#step-4-final-classification)
   - [Step 5: Get descriptive statistics and generate plots (Optional)](#step-5-get-descriptive-statistics-and-generate-plots-optional)
+- [\[Optional Tool\] Fuzzy String Matching Tool](#optional-tool-fuzzy-string-matching-tool)
+  - [Sheet 5: `fuzzy_string`](#sheet-5-fuzzy_string)
 
 # Before you begin
 
@@ -37,18 +39,18 @@
 └── fraud_detection.py # Contains implemented methods.
 ```
 - Install [Python-3.12.9](https://www.python.org/downloads/release/python-3129/). Newer verions may work as well.
-
+- Open command prompt (Windows)
 - [Optional] Set up a virtual environment to avoid version conflicts.
-    - Open command prompt (Windows)
     - Navigate to the project folder: `cd \path\to\spam-detection`
     - Create a virtual environment: `python -m venv myvenv` 
     - Activate the virtual environment: `myvenv\Scripts\activate`
-
+- Open command prompt (Windows)
 - Install required Python modules: `pip install -r \path\to\requirements.txt`
+
 
 # Set up parameters
 
-- Ensure that `parameters.xlsx` exists in the `config` folder. This file should contain four sheets:
+- Ensure that `parameters.xlsx` exists in the `config` folder. This file should contain the following four sheets:
 
 ## Sheet 1: `filepaths`
 Specifies paths for files and folder. This sheet contains three columns:
@@ -96,6 +98,7 @@ Contains a sequence of top-down rules to classify responses combining automated 
 
 - 🔧 **[OPTIONAL EDIT]** `use_rule`: Indicator for using the rule (`1`) or not (`0`).
 
+
 # Fraud detection
 Although fraud detection can be implemented by double-clicking Python files, we strongly recommend using command prompt to exectue the file. 
 
@@ -105,15 +108,10 @@ Execute `01_initial_classification.py` to generate an output file with automated
 The output file path is the value of `flagged_file` in the `filepaths` sheet of `parameters.xlsx`. The output file will contain:
 
 - The original survey data columns.
-
 - Columns corresponding to each flag indicating TRUE or FLASE. Some additional columns corresponding to specific methods may also be created.
-
 - Columns corresponding to each flag group with the number of corresponding flags activated.
-
 - The automated response classification column `FLAG`.
-
 - Placeholder columns for manual classification by the user `MANUAL_FLAG` and `MANUAL_COMMENT`.
-
 
 ## Step 2: Get descriptive statistics and generate plots (Optional)
 Execute `02_get_initial_descriptives.py` to print descriptive statistics (such as counts) for the flags and flag groups and to generate co-occurence plots for diagnostic purposes. 
@@ -126,7 +124,6 @@ This step involves user to manually classify the responses, especially the ones 
 Manual classification can be done in the `flagged_file` itself. However, a `manual_file` path can be set in the `filepaths` sheet of `parameters.xlsx` if the file is copied before manual classification.
 
 - The `MANUAL_FLAG` entered by the user are used to evaluate the `condition_expr` in the `final_classification_rules` sheet of `parameters.xlsx`. 
-
 - `MANUAL_COMMENT` is an optional column to add information justfying the manual classification.
 
 ## Step 4: Final classification
@@ -135,10 +132,38 @@ Execute `04_final_classification.py` to generate an output file that combines au
 The output file path is the value of `final_output_file` in the `filepaths` sheet of `parameters.xlsx`. The output file will contain:
 
 - All columns in `manual_file`.
-
 - A final classification column `FINAL_FLAG`.
 
 ## Step 5: Get descriptive statistics and generate plots (Optional)
 Execute `05_get_final_descriptives.py` to print descriptive statistics (such as counts) for the flags and flag groups and to generate co-occurence plots for diagnostic purposes. 
 
-- If provided, the plots are saved in the `figure_folder` folder provided in the `filepaths` sheet of `parameters.xlsx`. 
+If `figure_folder` value provided in the `filepaths` sheet of `parameters.xlsx`, the plots are saved in the `figure_folder` folder. 
+
+
+# [Optional Tool] Fuzzy String Matching Tool
+
+This fuzzy string matching tool compares each text responses within a column and computes a similarity score (ranging from 0 and 100) based on the presence and frequency of shared words. Two columns are added to the dataframe: 
+
+- `FZ_COUNT_{column}`: Number of similar responses(score > set threshold), and 
+- `FZ_SIMILAR_{column}`: Score and text of similar responses. 
+
+This tool is particularly useful for larger samples as it provides an easy reference for closer inspection during manual review. It can also be implemented as a custom flag. 
+
+To use this tool, 
+
+- Install `rapidfuzz` v3.13 module using: `pip install rapidfuzz==3.13.0`
+- Verify that `fuzzy_string` sheet exists in `parameters.xlsx`. 
+- Verify that a value for the paramter `fuzzy_file` is provided in the `filepaths` sheet in `parameters.xlsx`. 
+  - If using this tool with automated response classification, set `fuzzy_file` same as `data_file` and run the `tool_mark_similar_responses.py` before `01_initial_classification.py`.
+  - If using this tool after automated response classification but before manual classification, set `fuzzy_file` same as `flagged_file` and run the `tool_mark_similar_responses.py` before manually classifying the data.
+  
+## Sheet 5: `fuzzy_string`
+Contains information about text-response columns on which fuzzy string algorithm should be applied. Each row specifies one text-response column. This sheet contains six columns:
+
+- ✏️ **[EDIT / REVIEW]**  `column`: Data column name to check for similar resppnses.
+
+- 🔧 **[OPTIONAL EDIT]** `minimum_length`: The minimum number of characters a text response should have to be tested for similarity. Responses having lesser number of characters will be ignored. This is useful to ignore comparing common short and valid responses like "Nothing", "None", or any context-dependent short responses. 
+
+- 🚫 **[DO NOT EDIT]** `fuzzy_algorithm`: Fuzzy string matching llgorithm used for comparing responses. We recommend using `token_sort_ratio` as it considers both the presence and the frequency of words. For more details, please see the [`rapidfuzz` documentation](https://rapidfuzz.github.io/RapidFuzz/Usage/fuzz.html).
+
+- 🔧 **[OPTIONAL EDIT]** `threshold`: Threshold to mark similar responses. Defaults to 65. This should be changed based on trial and error. 
