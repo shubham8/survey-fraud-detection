@@ -39,12 +39,13 @@
 └── fraud_detection.py # Contains implemented methods.
 ```
 - Install [Python-3.12.9](https://www.python.org/downloads/release/python-3129/). Newer verions may work as well.
-- Open command prompt (Windows)
+
+*For Windows users:*
+- Open command prompt 
 - [Optional] Set up a virtual environment to avoid version conflicts.
     - Navigate to the project folder: `cd \path\to\spam-detection`
     - Create a virtual environment: `python -m venv myvenv` 
     - Activate the virtual environment: `myvenv\Scripts\activate`
-- Open command prompt (Windows)
 - Install required Python modules: `pip install -r \path\to\requirements.txt`
 
 
@@ -100,7 +101,13 @@ Contains a sequence of top-down rules to classify responses combining automated 
 
 
 # Fraud detection
-Although fraud detection can be implemented by double-clicking Python files, we strongly recommend using command prompt to exectue the file. 
+
+❗ **IMPORTANT: We strongly recommend executing the scripts via the command line**. 
+
+*For Windows users:*
+- Open command prompt (Windows)
+  - Navigate to the project folder: `cd \path\to\spam-detection`
+  - Execute the script: `python script_name.py` (e.g., `python 02_get_initial_descriptives.py`)
 
 ## Step 1: Initial classification
 Execute `01_initial_classification.py` to generate an output file with automated response classification. 
