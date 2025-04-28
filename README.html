@@ -74,7 +74,10 @@
 └── fraud_detection.py # Contains implemented methods.
 </code></pre><ul>
 <li>Install <a href="https://www.python.org/downloads/release/python-3129/">Python-3.12.9</a>. Newer verions may work as well.</li>
-<li>Open command prompt (Windows)</li>
+</ul>
+<p><em>For Windows users:</em></p>
+<ul>
+<li>Open command prompt</li>
 <li>[Optional] Set up a virtual environment to avoid version conflicts.
 <ul>
 <li>Navigate to the project folder: <code>cd \path\to\spam-detection</code></li>
@@ -82,7 +85,6 @@
 <li>Activate the virtual environment: <code>myvenv\Scripts\activate</code></li>
 </ul>
 </li>
-<li>Open command prompt (Windows)</li>
 <li>Install required Python modules: <code>pip install -r \path\to\requirements.txt</code></li>
 </ul>
 <h1 id="set-up-parameters">Set up parameters </h1>
@@ -157,7 +159,16 @@
 </li>
 </ul>
 <h1 id="fraud-detection">Fraud detection </h1>
-<p>Although fraud detection can be implemented by double-clicking Python files, we strongly recommend using command prompt to exectue the file.</p>
+<p>❗ <strong>IMPORTANT: We strongly recommend executing the scripts via the command line</strong>.</p>
+<p><em>For Windows users:</em></p>
+<ul>
+<li>Open command prompt (Windows)
+<ul>
+<li>Navigate to the project folder: <code>cd \path\to\spam-detection</code></li>
+<li>Execute the script: <code>python script_name.py</code> (e.g., <code>python 02_get_initial_descriptives.py</code>)</li>
+</ul>
+</li>
+</ul>
 <h2 id="step-1-initial-classification">Step 1: Initial classification </h2>
 <p>Execute <code>01_initial_classification.py</code> to generate an output file with automated response classification.</p>
 <p>The output file path is the value of <code>flagged_file</code> in the <code>filepaths</code> sheet of <code>parameters.xlsx</code>. The output file will contain:</p>
