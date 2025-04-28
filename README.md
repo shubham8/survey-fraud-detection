@@ -154,7 +154,7 @@ This fuzzy string matching tool compares each text responses within a column and
 - `FZ_COUNT_{column}`: Number of similar responses(score > set threshold), and 
 - `FZ_SIMILAR_{column}`: Score and text of similar responses. 
 
-This tool is particularly useful for larger samples as it provides an easy reference for closer inspection during manual review. It can also be implemented as a custom flag. 
+This tool is particularly useful for larger samples as it provides an easy reference for closer inspection during manual review; however, execution may be slow. It can also be implemented as a custom flag. 
 
 To use this tool, 
 
