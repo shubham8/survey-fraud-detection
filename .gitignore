@@ -16,4 +16,4 @@ __pycache__/
 Thumbs.db
 
 # Experimental files
-xx_*.py
+_*.py

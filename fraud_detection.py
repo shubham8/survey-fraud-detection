@@ -818,7 +818,7 @@ def plot_flag_cooccurrence_heatmap(df, flag_columns,
         raise ValueError(f"Missing column(s) in DataFrame: {', '.join(missing_cols)}")
 
     # Binary matrix for classifications
-    classification_dummies = pd.get_dummies(df[flag_columns])
+    classification_dummies = pd.get_dummies(df[flag_columns], prefix="", prefix_sep="")
     classification_df = (
         classification_dummies
         .astype(bool)
