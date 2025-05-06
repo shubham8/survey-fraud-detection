@@ -1,5 +1,10 @@
 # **Fraud Detection Method**
 
+❗**Note**: This repository is a work in progress. Contents may change as the work evolves.
+
+**Recommended citation**: Agrawal, S., Watson, G. P., Schuster, A. M., & Cotten, S. R. (n.d.). The FAST (Flexible, Adaptive, Systematic, and Transparent) Approach to Detecting Fraudulent Responses in Online Surveys. *preprint*.
+
+- [**Fraud Detection Method**](#fraud-detection-method)
 - [Before you begin](#before-you-begin)
 - [Set up parameters](#set-up-parameters)
   - [Sheet 1: `filepaths`](#sheet-1-filepaths)
