@@ -520,7 +520,7 @@ def check_BurstResponses(df, flag_name, column_start_time, column_duration,
 def check_DuplicatedText(df, flag_name, list_of_columns, min_length, max_length, 
                                  search_strategy='column', create_column_flag=False):
     """
-    Adds a flag column to the dataframe for very short survey duration.
+    Adds a flag column to the dataframe for duplicated text response of specified length.
         
     Parameters:
         df (pd.DataFrame) : Dataframe with relevant columns.
