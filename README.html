@@ -139,8 +139,6 @@
         </head>
         <body class="vscode-body vscode-light">
             <h1 id="fraud-detection-method"><strong>Fraud Detection Method</strong></h1>
-<p>❗<strong>Note</strong>: This repository is a work in progress. Contents may change as the work evolves.</p>
-<p><strong>Recommended citation</strong>: Agrawal, S., Watson, G. P., Schuster, A. M., &amp; Cotten, S. R. (n.d.). The FAST (Flexible, Adaptive, Systematic, and Transparent) Approach to Detecting Fraudulent Responses in Online Surveys. <em>preprint</em>.</p>
 <ul>
 <li><a href="#fraud-detection-method"><strong>Fraud Detection Method</strong></a></li>
 <li><a href="#before-you-begin">Before you begin</a></li>
@@ -267,7 +265,7 @@
 <p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>rule_num</code>: Rule number. Optional.</p>
 </li>
 <li>
-<p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>condition_expr</code>: An expression for the Boolean condition using <code>FLAG</code> and <code>MANUAL_FLAG</code> columns. The expression is evaluated using Python's <a href="https://docs.python.org/3/library/functions.html#eval"><code>eval()</code></a>. The evaluation of the expression must return either <code>True</code> or <code>False</code>.</p>
+<p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>condition_expr</code>: An expression for the Boolean condition using <code>AUTOMATED_FLAG</code> and <code>MANUAL_FLAG</code> columns. The expression is evaluated using Python's <a href="https://docs.python.org/3/library/functions.html#eval"><code>eval()</code></a>. The evaluation of the expression must return either <code>True</code> or <code>False</code>.</p>
 </li>
 <li>
 <p>🔧 <strong>[OPTIONAL EDIT]</strong> <code>classification</code>: Response classification label.</p>
@@ -294,7 +292,7 @@
 <li>The original survey data columns.</li>
 <li>Columns corresponding to each flag indicating TRUE or FLASE. Some additional columns corresponding to specific methods may also be created.</li>
 <li>Columns corresponding to each flag group with the number of corresponding flags activated.</li>
-<li>The automated response classification column <code>FLAG</code>.</li>
+<li>The automated response classification column <code>AUTOMATED_FLAG</code>.</li>
 <li>Placeholder columns for manual classification by the user <code>MANUAL_FLAG</code> and <code>MANUAL_COMMENT</code>.</li>
 </ul>
 <h2 id="step-2-get-descriptive-statistics-and-generate-plots-optional">Step 2: Get descriptive statistics and generate plots (Optional)</h2>
@@ -303,7 +301,7 @@
 <li>If provided, the plots are saved in the <code>figure_folder</code> folder provided in the <code>filepaths</code> sheet of <code>parameters.xlsx</code>.</li>
 </ul>
 <h2 id="step-3-manual-classification">Step 3: Manual classification</h2>
-<p>This step involves user to manually classify the responses, especially the ones marked as <code>TBD</code> in the <code>FLAG</code> column during automated classification.</p>
+<p>This step involves user to manually classify the responses, especially the ones marked as <code>TBD</code> in the <code>AUTOMATED_FLAG</code> column during automated classification.</p>
 <p>Manual classification can be done in the <code>flagged_file</code> itself. However, a <code>manual_file</code> path can be set in the <code>filepaths</code> sheet of <code>parameters.xlsx</code> if the file is copied before manual classification.</p>
 <ul>
 <li>The <code>MANUAL_FLAG</code> entered by the user are used to evaluate the <code>condition_expr</code> in the <code>final_classification_rules</code> sheet of <code>parameters.xlsx</code>.</li>

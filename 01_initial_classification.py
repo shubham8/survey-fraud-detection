@@ -31,7 +31,7 @@ if __name__ == "__main__":
     df = df.pipe(fraud_detection.flag_responses,
                 params_sheet='flags')
     # Get initial response classification
-    df[['FLAG', 'FLAG_RULE']] = df.pipe(
+    df[['AUTOMATED_FLAG', 'AUTOMATED_FLAG_RULE']] = df.pipe(
         fraud_detection.classify_responses, 
         params_sheet='initial_classification_rules'
     )    

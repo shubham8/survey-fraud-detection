@@ -39,7 +39,7 @@ def get_fuzzy_scores(df, column_name, min_length=7, fuzz_func='token_sort_ratio'
     
     ## Calculate similarity matrix
     similarity_matrix = np.zeros((N, N), dtype=int)
-    for i, j in itertools.combinations(df.index, 2):
+    for i, j in itertools.combinations(range(N), 2):
         # Check only those response that are longer than min_length
         if len(texts[i].strip()) >= min_length or len(texts[j].strip()) >= min_length:
             score = int(fuzz_func(texts[i], texts[j]))
@@ -57,13 +57,10 @@ def get_fuzzy_scores(df, column_name, min_length=7, fuzz_func='token_sort_ratio'
             if score >= threshold:
                 similar_matches[i].append(f'{j}. ({score}) "{texts[j]}"')
 
-    df[f'FZ_SIMILAR_{column_name}'] = similar_matches.apply('; '.join)
-    df[f'FZ_SIMILAR_{column_name}'] = (
-        df[f'FZ_SIMILAR_{column_name}']
-        .replace('', np.nan)
-        .infer_objects(copy=False)
-    )
-    
+    col = f'FZ_SIMILAR_{column_name}' # Fuzzy column name
+    df[col] = similar_matches.apply('; '.join)
+    df[col] = df[col].mask(df[col] == '') # Replace empty string with NA
+
     ## Save similarity matrix
     if isinstance(save_matrix, str):
         if not save_matrix.endswith(".csv"):

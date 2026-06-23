@@ -23,9 +23,9 @@ if __name__ == "__main__":
     output_dir = os.path.dirname(fn_output) or "." 
     os.makedirs(output_dir, exist_ok=True) # Create necessary directories
 
-    # Verify FLAG and MANUAL_FLAG columns
-    if 'FLAG' not in df.columns:
-        raise ValueError("The automated classification column 'FLAG' not found in the data file.")
+    # Verify AUTOMATED_FLAG and MANUAL_FLAG columns
+    if 'AUTOMATED_FLAG' not in df.columns:
+        raise ValueError("The automated classification column 'AUTOMATED_FLAG' not found in the data file.")
     if 'MANUAL_FLAG' not in df.columns:
         raise ValueError("The manual classification column 'MANUAL_FLAG' not found in the data file.")
     if df['MANUAL_FLAG'].empty:

@@ -190,7 +190,7 @@ def check_SuspiciousCharacter(df, flag_name, list_of_columns, list_of_chars=["\x
 def check_SuspiciousName(df, flag_name, column_first_name, column_last_name, min_word_length=2):
     """
     Adds a flag column to the dataframe for suspicious response to first name and last name columns.
-    This flag only works if the first name and last name are collectde in two separate text responses. 
+    This flag only works if the first name and last name are collected in two separate text responses. 
     A response is considered suspicious if any one of the name fields repeats a word (while ignoring initials) from the other name field.
 
     Parameters:
@@ -247,12 +247,24 @@ def check_IPLocation(df, flag_name, column_ip, target_region, flag_missing, regi
         df (pd.DataFrame) : Dataframe with flag.
     """
     import geocoder
+    def lookup_ip(ip):
+        """Looks up IP lat-long and location"""
+        g = geocoder.ipinfo(str(ip))
+        return pd.Series({
+            'IPLatitude': g.latlng[0],
+            'IPLongitude': g.latlng[1],
+            'IPCountry': g.country,
+            'IPState': g.state,
+            'IPCity': g.city,
+        })
+    df[['IPLatitude', 'IPLongitude', 'IPCountry', 'IPState','IPCity']] = df[column_ip].apply(lookup_ip)
+
     if region_level == 'country':
-        df['IPLocation'] = df[column_ip].apply(lambda x: geocoder.ip(x).country)
+        df['IPLocation'] = df['IPCountry']
     elif region_level == 'state':
-        df['IPLocation'] = df[column_ip].apply(lambda x: geocoder.ip(x).state)
+        df['IPLocation'] = df['IPState']
     elif region_level == 'city':
-        df['IPLocation'] = df[column_ip].apply(lambda x: geocoder.ip(x).city)
+        df['IPLocation'] = df['IPCity']
     else:
         raise ValueError("The region_level should be either \'country\', \'state\', or \'city\'.")
 
@@ -711,7 +723,9 @@ def classify_responses(df, params_sheet):
         local_dict = row.to_dict()
         for _, rule in params.iterrows():
             try:
-                if eval(rule['condition_expr'], {}, local_dict):
+                expr = rule['condition_expr']
+                expr_eval = expr if isinstance(expr, bool) else eval(expr, {"TRUE": True, "FALSE": False}, local_dict)
+                if expr_eval:
                     return (rule['classification'], rule['rule_num'])
             except Exception as e:
                 raise ValueError(f"Error in {rule['rule_num']} using the expression: {rule['condition_expr']}.")
@@ -726,9 +740,9 @@ def classify_responses(df, params_sheet):
 ##### DESCRIPTIVE AND PLOTS #####
 #################################
 
-def print_flag_counts(df, params_sheet):
+def get_flag_counts(df, params_sheet):
     """
-    Prints out simple counts of flags and flag groups. 
+    Returns crosstabs of flags and flag groups. Prints simple counts. 
 
     Parameters:
         df (pd.DataFrame) : Dataframe with survey data. 
@@ -736,7 +750,7 @@ def print_flag_counts(df, params_sheet):
             Must contain columns 'flag_name', 'method_name', 'flag_group', 'use_flag', 'parameters'.
 
     Returns:
-        None : This function prints response classification counts. 
+        crosstabs (pd.DataFrame) : A dataframe with flag vs. flag_groups crosstabs. 
     """
     ## Reading flag parameters
     params = read_parameters_sheet(sheet_name=params_sheet)
@@ -750,29 +764,37 @@ def print_flag_counts(df, params_sheet):
 
     flags = params['flag_name'].unique()
     print(f"Number of unique responses flagged: {df[flags].any(axis=1).sum()} out of {df.shape[0]}") # Total rows with at least one flag
-    print(f"\nFlags:\n{df[flags].sum().to_frame(name='Count')}") # Table of flag counts
+    count_flags = df[flags].sum().to_frame(name='Count')
+    print(f"\nFlags:\n{count_flags}") # Table of flag counts
 
     flag_groups = params['flag_group'].dropna().unique()
-    print(f"\nFlag Groups:\n{df[flag_groups].sum().to_frame(name='Count')}") # Table of flag group counts
+    count_groups = df[flag_groups].sum().to_frame(name='Count')
+    print(f"\nFlag Groups:\n{count_groups}") # Table of flag group counts
 
-    return None
+    crosstabs = (df[flags].gt(0).astype(int)).T.dot(df[flag_groups].gt(0).astype(int))
+    # add totals
+    crosstabs.loc['Total'] = df[flag_groups].gt(0).astype(int).sum()
+    crosstabs['Total'] = df[flags].gt(0).astype(int).sum()
+    print(crosstabs)
+    return crosstabs
 
-def print_classification_counts(df, flag_column):
+def get_classification_counts(df, flag_column):
     """
-    Prints out simple counts of flags and flag groups. 
+    Returns counts of flags and flag groups. 
 
     Parameters:
         df (pd.DataFrame) : Dataframe with survey data. 
         flag_column (str) : Column name for the flag classification. 
-            'FLAG' for algorithmic flags, 'MANUAL_FLAG' for manual check flags, 'FINAL_FLAG' for combined flags. 
+            'AUTOMATED_FLAG' for algorithmic flags, 'MANUAL_FLAG' for manual check flags, 'FINAL_FLAG' for combined flags. 
 
     Returns:
-        None : This function prints flag counts and flag group counts. 
+        count_df (pd.DataFrame) : A dataframe with flag or flag group counts. 
     """
 
-    print(f"Response classification: {flag_column}\n{df[flag_column].value_counts().rename_axis(None).to_frame(name='Count')}")
+    count_df = df[flag_column].value_counts().rename_axis(None).to_frame(name='Count')
+    print(f"Response classification: {flag_column}\n{count_df}")
 
-    return None
+    return count_df
 
 def plot_flag_cooccurrence_heatmap(df, flag_columns,
                                   params_sheet,
@@ -784,7 +806,7 @@ def plot_flag_cooccurrence_heatmap(df, flag_columns,
 
     Parameters:
         df (pd.DataFrame) : Dataframe with survey data and flags.
-        flag_columns (List[str]) : Column names containing the classification (e.g., 'FLAG', 'MANUAL_FLAG', or 'FINAL_FLAG').
+        flag_columns (List[str]) : Column names containing the classification (e.g., 'AUTOMATED_FLAG', 'MANUAL_FLAG', or 'FINAL_FLAG').
         params_sheet (str) : Excel sheet name with flag information ('flags').
             Must contain columns 'flag_name', 'method_name', 'flag_group', 'use_flag', 'parameters'.
         use_groups (bool) : If True, use flag groups instead of individual flags.
@@ -817,23 +839,33 @@ def plot_flag_cooccurrence_heatmap(df, flag_columns,
     if missing_cols:
         raise ValueError(f"Missing column(s) in DataFrame: {', '.join(missing_cols)}")
 
-    # Binary matrix for classifications
-    classification_dummies = pd.get_dummies(df[flag_columns], prefix="", prefix_sep="")
-    classification_df = (
-        classification_dummies
-        .astype(bool)
-        .fillna(False)
-        .astype(int)
-    )
-    flag_df = (
+    # Create combined dataframe for co-occurence matrix
+    combined_df = (
         df[columns]
         .astype(bool)
         .fillna(False)
         .astype(int)
     )
-    # Combine and compute co-occurrence matrix
-    combined = pd.concat([flag_df, classification_df], axis=1)
-    co_matrix = combined.T @ combined  # True count of co-occurrences (dot product)
+    for flag_column in flag_columns:
+        # Binary matrix for classifications
+        prefix = {
+            "AUTOMATED_FLAG": "(auto) ",
+            "MANUAL_FLAG": "(manual) ",
+            "FINAL_FLAG": "(final) "
+        }.get(flag_column, "")
+
+        classification_dummies = pd.get_dummies(df[flag_column], prefix=prefix, prefix_sep="")
+        classification_df = (
+            classification_dummies
+            .astype(bool)
+            .fillna(False)
+            .astype(int)
+        )
+        # Combine co-occurrence matrix
+        combined_df = pd.concat([combined_df, classification_df], axis=1)
+
+    # Compute co-occurence matrix
+    co_matrix = combined_df.T @ combined_df  # True count of co-occurrences (dot product)
 
     # Initialize heatmap
     fontsize = 16
@@ -863,10 +895,15 @@ def plot_flag_cooccurrence_heatmap(df, flag_columns,
         df_flags = df_flags[df_flags['flag_name'].isin(columns)].reset_index(drop=True)
 
     group_boundaries = []
-    for group in df_flags['flag_group'].unique():
-        max_index = df_flags[df_flags['flag_group'] == group].index.max()
-        group_boundaries.append(max_index)
-    group_boundaries = sorted(set(group_boundaries))
+    if not use_groups:
+        for group in df_flags['flag_group'].unique():
+            max_index = df_flags[df_flags['flag_group'] == group].index.max()
+            group_boundaries.append(max_index)
+        group_boundaries = sorted(set(group_boundaries))
+    # Add flag column boundaries for dummies
+    for flag_column in flag_columns:
+        last_boundary = group_boundaries[-1] if group_boundaries else len(columns) - 1
+        group_boundaries.append(last_boundary + df[flag_column].nunique())
 
     # Draw visual borders
     flag_end_index = len(columns) - 1
@@ -875,10 +912,9 @@ def plot_flag_cooccurrence_heatmap(df, flag_columns,
     ax.axhline(0, color='black', linewidth=2)
     ax.axvline(0, color='black', linewidth=2)
 
-    if not use_groups:
-        for boundary in group_boundaries:
-            ax.axhline(boundary + 1, color='black', linewidth=2)
-            ax.axvline(boundary + 1, color='black', linewidth=2)
+    for boundary in group_boundaries:
+        ax.axhline(boundary + 1, color='black', linewidth=2)
+        ax.axvline(boundary + 1, color='black', linewidth=2)
 
     # Classfication border
     ax.axhline(flag_end_index + 1, color='black', linewidth=3)

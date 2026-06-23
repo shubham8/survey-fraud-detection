@@ -2,8 +2,6 @@
 
 ❗**Note**: This repository is a work in progress. Contents may change as the work evolves.
 
-**Recommended citation**: Agrawal, S., Watson, G. P., Schuster, A. M., & Cotten, S. R. (n.d.). The FAST (Flexible, Adaptive, Systematic, and Transparent) Approach to Detecting Fraudulent Responses in Online Surveys. *preprint*.
-
 - [**Fraud Detection Method**](#fraud-detection-method)
 - [Before you begin](#before-you-begin)
 - [Set up parameters](#set-up-parameters)
@@ -98,7 +96,7 @@ Contains a sequence of top-down rules to classify responses combining automated 
 
 - 🔧 **[OPTIONAL EDIT]** `rule_num`: Rule number. Optional.
 
-- 🔧 **[OPTIONAL EDIT]** `condition_expr`: An expression for the Boolean condition using `FLAG` and `MANUAL_FLAG` columns. The expression is evaluated using Python's [`eval()`](https://docs.python.org/3/library/functions.html#eval). The evaluation of the expression must return either `True` or `False`.
+- 🔧 **[OPTIONAL EDIT]** `condition_expr`: An expression for the Boolean condition using `AUTOMATED_FLAG` and `MANUAL_FLAG` columns. The expression is evaluated using Python's [`eval()`](https://docs.python.org/3/library/functions.html#eval). The evaluation of the expression must return either `True` or `False`.
 
 - 🔧 **[OPTIONAL EDIT]** `classification`: Response classification label.
 
@@ -122,7 +120,7 @@ The output file path is the value of `flagged_file` in the `filepaths` sheet of 
 - The original survey data columns.
 - Columns corresponding to each flag indicating TRUE or FLASE. Some additional columns corresponding to specific methods may also be created.
 - Columns corresponding to each flag group with the number of corresponding flags activated.
-- The automated response classification column `FLAG`.
+- The automated response classification column `AUTOMATED_FLAG`.
 - Placeholder columns for manual classification by the user `MANUAL_FLAG` and `MANUAL_COMMENT`.
 
 ## Step 2: Get descriptive statistics and generate plots (Optional)
@@ -131,7 +129,7 @@ Execute `02_get_initial_descriptives.py` to print descriptive statistics (such a
 - If provided, the plots are saved in the `figure_folder` folder provided in the `filepaths` sheet of `parameters.xlsx`. 
 
 ## Step 3: Manual classification
-This step involves user to manually classify the responses, especially the ones marked as `TBD` in the `FLAG` column during automated classification. 
+This step involves user to manually classify the responses, especially the ones marked as `TBD` in the `AUTOMATED_FLAG` column during automated classification. 
 
 Manual classification can be done in the `flagged_file` itself. However, a `manual_file` path can be set in the `filepaths` sheet of `parameters.xlsx` if the file is copied before manual classification.
 
